@@ -1,6 +1,7 @@
 <?php
 
 require('../vendor/autoload.php');
+require('../vendor/bootstrap.php');
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -14,15 +15,6 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 $app->get('/', function() use($app) {
 
-    $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-
-    $server = $url["host"];
-    $username = $url["user"];
-    $password = $url["pass"];
-    $db = substr($url["path"], 1);
-
-    $conn = new mysqli($server, $username, $password, $db);
-    var_dump($conn);
   $app['monolog']->addDebug('logging output.');
   return 'Hello user!';
 });
