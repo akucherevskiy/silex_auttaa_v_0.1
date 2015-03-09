@@ -1,7 +1,7 @@
 <?php
 
 require('../vendor/autoload.php');
-require('../vendor/bootstrap.php');
+require('bootstrap.php');
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -20,5 +20,3 @@ $app->get('/', function() use($app) {
 });
 
 $app->run();
-
-?>
