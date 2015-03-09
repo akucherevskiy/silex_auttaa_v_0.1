@@ -14,25 +14,15 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 $app->get('/', function() use($app) {
 
-  $dbopts = parse_url(getenv('DATABASE_URL'));
-  $app->register(new Herrera\Pdo\PdoServiceProvider(),
-      array(
-          'pdo.dsn' => 'pgsql:dbname='.ltrim($dbopts["path"],'/').';host='.$dbopts["host"],
-          'pdo.port' => $dbopts["port"],
-          'pdo.username' => $dbopts["user"],
-          'pdo.password' => $dbopts["pass"]
-      )
-  );
+    $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-    $st = $app['pdo']->prepare('SELECT name FROM test_table');
-    $st->execute();
+    $server = $url["host"];
+    $username = $url["user"];
+    $password = $url["pass"];
+    $db = substr($url["path"], 1);
 
-    $names = array();
-    while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-        $app['monolog']->addDebug('Row ' . $row['name']);
-        $names[] = $row;
-    }
-    var_dump($names);
+    $conn = new mysqli($server, $username, $password, $db);
+    var_dump($conn);
   $app['monolog']->addDebug('logging output.');
   return 'Hello user!';
 });
